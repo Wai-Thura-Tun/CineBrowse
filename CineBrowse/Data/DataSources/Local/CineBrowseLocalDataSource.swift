@@ -1,0 +1,35 @@
+//
+//  CineBrowseLocalDataSource.swift
+//  CineBrowse
+//
+//  Created by Wai Thura Tun on 7/5/24.
+//
+
+import Foundation
+import RealmSwift
+
+class CineBrowseLocalDataSource {
+    
+    static let shared: CineBrowseLocalDataSource = .init()
+    
+    private let realm: Realm
+    
+    private init() {
+        self.realm = try! Realm()
+    }
+    
+    func saveProfile(for profile: ProfileVO) throws {
+        try realm.write {
+            realm.add(profile.toEntity(), update: .all)
+        }
+    }
+    
+    func deleteProfile(for profileId: ProfileVO) throws {
+        let object = realm.object(ofType: ProfileEntity.self, forPrimaryKey: profileId)
+        if let object = object {
+            try realm.write {
+                realm.delete(object)
+            }
+        }
+    }
+}
