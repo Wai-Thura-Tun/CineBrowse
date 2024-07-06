@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0604B8AF2C37AEAE0045BC94 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0604B8AE2C37AEAE0045BC94 /* GoogleService-Info.plist */; };
 		0604B8B12C37BB760045BC94 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0604B8B02C37BB760045BC94 /* Home.storyboard */; };
 		0604B8B42C37BBB30045BC94 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0604B8B32C37BBB30045BC94 /* HomeVC.swift */; };
 		0604B8B62C37BD520045BC94 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0604B8B52C37BD520045BC94 /* UIViewController.swift */; };
@@ -81,7 +80,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0604B8AE2C37AEAE0045BC94 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0604B8B02C37BB760045BC94 /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		0604B8B32C37BBB30045BC94 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		0604B8B52C37BD520045BC94 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
@@ -302,7 +300,6 @@
 				068F141B2C36C4D60025F2C6 /* SceneDelegate.swift */,
 				068F14222C36C4DE0025F2C6 /* Assets.xcassets */,
 				068F14272C36C4DE0025F2C6 /* Info.plist */,
-				0604B8AE2C37AEAE0045BC94 /* GoogleService-Info.plist */,
 			);
 			path = CineBrowse;
 			sourceTree = "<group>";
@@ -530,7 +527,6 @@
 			files = (
 				068F14232C36C4DE0025F2C6 /* Assets.xcassets in Resources */,
 				069C27662C3790D8009E00D0 /* Auth.storyboard in Resources */,
-				0604B8AF2C37AEAE0045BC94 /* GoogleService-Info.plist in Resources */,
 				0604B8B12C37BB760045BC94 /* Home.storyboard in Resources */,
 				068F14262C36C4DE0025F2C6 /* Base in Resources */,
 				068F14212C36C4D60025F2C6 /* Base in Resources */,
