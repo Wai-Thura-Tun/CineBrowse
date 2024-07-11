@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseCore
+import FirebaseAuth
 import GoogleSignIn
 import RealmSwift
 
@@ -19,7 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         let config = Realm.Configuration.init(schemaVersion: 1)
         Realm.Configuration.defaultConfiguration = config
+        
         FirebaseApp.configure()
+        
         return true
     }
 

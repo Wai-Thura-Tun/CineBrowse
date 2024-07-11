@@ -82,10 +82,9 @@
         <!--RootNC-->
         <scene sceneID="ZUg-fZ-ixj">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SPx-Xd-OUj" customClass="RootNC" customModule="CineBrowse" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="SPx-Xd-OUj" customClass="RootNC" customModule="CineBrowse" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="xIl-Od-rjR">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

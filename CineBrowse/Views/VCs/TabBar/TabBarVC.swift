@@ -45,7 +45,10 @@ class TabBarVC: UITabBarController {
             favoriteVC,
             profileVC
         ]
-        tabBar.backgroundColor = UIColor.systemBackground
-        tabBar.tintColor = UIColor.label
+        
+        tabBar.shadowImage = .init()
+        tabBar.addShadow()
+        tabBar.backgroundColor = UIColor.black
+        tabBar.tintColor = UIColor.white
     }
 }

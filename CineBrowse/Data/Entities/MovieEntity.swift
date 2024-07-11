@@ -8,19 +8,24 @@
 import Foundation
 import RealmSwift
 
-class FavoriteEntity: Object {
-    @Persisted(primaryKey: true) var movieID: String = ""
+class MovieEntity: Object {
+    @Persisted(primaryKey: true) var id: ObjectId
+    @Persisted var movieID: Int = 0
     @Persisted var title: String = ""
+    @Persisted var isMovie: Bool = true
     @Persisted var posterUrl: String = ""
     
     convenience init(
-        movieID: String, 
+        movieID: Int,
         title: String,
+        isMovie: Bool,
         posterUrl: String
-    ) {
+    ) 
+    {
         self.init()
         self.movieID = movieID
         self.title = title
+        self.isMovie = isMovie
         self.posterUrl = posterUrl
     }
 }
