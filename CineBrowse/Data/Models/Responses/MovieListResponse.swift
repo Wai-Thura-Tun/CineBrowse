@@ -33,3 +33,8 @@ enum MovieListType: String {
     case trending = "Trending"
     case related = "Related"
 }
+
+enum MediaType: String, CaseIterable {
+    case movie = "Movies"
+    case tv = "TV Series"
+}

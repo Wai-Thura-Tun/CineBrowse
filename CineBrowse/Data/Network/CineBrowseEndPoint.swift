@@ -22,6 +22,10 @@ enum CineBrowseEndPoint: EndPoint {
     case TVCredit(Int)
     case MovieRelated(Int)
     case TVRelated(Int)
+    case MovieSearch(Encodable)
+    case TVSearch(Encodable)
+    case MovieGenres
+    case TVGenres
     
     var path: String {
         switch self {
@@ -49,6 +53,14 @@ enum CineBrowseEndPoint: EndPoint {
             "tv/\(id)/credits"
         case .TVRelated(let id):
             "/tv/\(id)/similar"
+        case .MovieSearch:
+            "/search/movie"
+        case .TVSearch:
+            "/search/tv"
+        case .MovieGenres:
+            "/genre/movie/list"
+        case .TVGenres:
+            "/genre/tv/list"
         }
     }
     
@@ -65,7 +77,11 @@ enum CineBrowseEndPoint: EndPoint {
              .MovieCredit,
              .TVCredit,
              .MovieRelated,
-             .TVRelated:
+             .TVRelated,
+             .MovieSearch,
+             .TVSearch,
+             .MovieGenres,
+             .TVGenres:
             .get
         }
     }
@@ -83,7 +99,11 @@ enum CineBrowseEndPoint: EndPoint {
              .MovieCredit,
              .TVCredit,
              .MovieRelated,
-             .TVRelated:
+             .TVRelated,
+             .MovieSearch,
+             .TVSearch,
+             .MovieGenres,
+             .TVGenres:
             nil
         }
     }
@@ -100,9 +120,13 @@ enum CineBrowseEndPoint: EndPoint {
              .MovieCredit,
              .TVCredit,
              .MovieRelated,
-             .TVRelated:
+             .TVRelated,
+             .MovieGenres,
+             .TVGenres:
             nil
-        case .Genre(let request):
+        case .Genre(let request),
+             .MovieSearch(let request),
+             .TVSearch(let request):
             request.toDict()
         }
     }
@@ -120,7 +144,11 @@ enum CineBrowseEndPoint: EndPoint {
              .MovieCredit,
              .TVCredit,
              .MovieRelated,
-             .TVRelated:
+             .TVRelated,
+             .MovieSearch,
+             .TVSearch,
+             .MovieGenres,
+             .TVGenres:
             URLEncoding.default
         }
     }
