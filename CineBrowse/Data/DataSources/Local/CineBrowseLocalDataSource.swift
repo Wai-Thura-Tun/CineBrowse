@@ -32,4 +32,28 @@ class CineBrowseLocalDataSource {
             }
         }
     }
+    
+    func saveMovieLists(for movie: [MovieListVO]) throws {
+        let objects = realm.objects(MovieEntity.self)
+        if objects.count > 0 {
+            try realm.write {
+                realm.delete(objects)
+            }
+        }
+        try realm.write {
+            realm.add(movie.map { $0.toEntity() }, update: .all)
+        }
+    }
+    
+    func getMovieLists() -> [MovieListVO] {
+        let objects = realm.objects(MovieListEntity.self)
+        return objects.map { $0.toVO() }
+    }
+    
+    func deleteMovieLists() throws {
+        let objects = realm.objects(MovieListEntity.self)
+        try realm.write {
+            realm.delete(objects)
+        }
+    }
 }

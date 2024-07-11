@@ -17,7 +17,7 @@ class RootNC: UINavigationController {
     }
     
     private func checkLoginStatus() {
-        if let user = Auth.auth().currentUser {
+        if Auth.auth().currentUser != nil {
             goToHome()
         }
         else {

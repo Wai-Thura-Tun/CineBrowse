@@ -1,0 +1,38 @@
+//
+//  UIImageView.swift
+//  CineBrowse
+//
+//  Created by Wai Thura Tun on 7/8/24.
+//
+
+import Foundation
+import UIKit
+import Kingfisher
+
+extension UIImageView {
+    func setImage(path: String, indicatorType: IndicatorType = .activity, animateDuration: TimeInterval = 1) {
+        let baseURL = URL(string: Bundle.main.infoDictionary?["IMG_URL"] as? String ?? "")
+        guard let baseURL = baseURL else { return }
+        let url = baseURL.appending(path: path)
+        let processor = DownsamplingImageProcessor(size: self.bounds.size) |> RoundCornerImageProcessor(cornerRadius: 10)
+        self.kf.indicatorType = indicatorType
+        self.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: ""),
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(animateDuration)),
+                .cacheOriginalImage
+            ]
+        )
+        { result in
+            switch result {
+                case .success(let value):
+                    print("Task done for: \(value.source.url?.absoluteString ?? "")")
+                case .failure(let error):
+                    print("Job failed: \(error.localizedDescription)")
+            }
+        }
+    }
+}

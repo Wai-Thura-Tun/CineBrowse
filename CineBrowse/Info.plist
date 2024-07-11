@@ -32,5 +32,13 @@
 			</array>
 		</dict>
 	</dict>
+    <key>BASE_URL</key>
+    <string>https://api.themoviedb.org/3</string>
+    <key>IMG_URL</key>
+    <string>https://image.tmdb.org/t/p/w500</string>
+    <key>MOVIE_URL</key>
+    <string>https://vidsrc.me/embed/movie?tmdb=</string>
+    <key>TV_URL</key>
+    <string>https://vidsrc.me/embed/tv?tmdb=</string>
 </dict>
 </plist>
