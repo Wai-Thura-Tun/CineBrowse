@@ -8,7 +8,6 @@ class DetailVC: UIViewController, Storyboarded, WKNavigationDelegate {
     @IBOutlet weak var viewVideo: UIView!
     @IBOutlet weak var viewReleaseDate: UIView!
     @IBOutlet weak var lblReleaseDate: UILabel!
-    @IBOutlet weak var viewRating: UIView!
     @IBOutlet weak var lblRating: UILabel!
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var btnFavorite: UIButton!
@@ -38,7 +37,6 @@ class DetailVC: UIViewController, Storyboarded, WKNavigationDelegate {
         setUpWebView()
         setUpProgressView()
         viewReleaseDate.addBorder()
-        viewRating.addBorder()
         setUpTblTV()
         setUpTblCastAndRelated()
     }
@@ -205,6 +203,11 @@ extension DetailVC: DetailViewDelegate {
             lblTitle.text = detail.title ?? detail.originalTitle ?? detail.name
             if let date = detail.releaseDate {
                 lblReleaseDate.text = String(date.prefix(4))
+            }
+            else {
+                if let date = detail.firstAirDate {
+                    lblReleaseDate.text = String(date.prefix(4))
+                }
             }
             lblRating.text = String(format: "%.1f", detail.voteAverage ?? 0.0)
             lblOverview.text = detail.overview

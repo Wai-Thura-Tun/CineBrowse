@@ -27,8 +27,6 @@ class TabBarVC: UITabBarController {
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        
-        
     }
     
     required init?(coder: NSCoder) {
@@ -49,6 +47,8 @@ class TabBarVC: UITabBarController {
         tabBar.shadowImage = .init()
         tabBar.addShadow()
         tabBar.backgroundColor = UIColor.black
-        tabBar.tintColor = UIColor.white
+        tabBar.tintColor = .white
+        tabBar.unselectedItemTintColor = .lightGray
     }
+    
 }

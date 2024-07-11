@@ -7,9 +7,9 @@
 
 import UIKit
 import FirebaseCore
-import FirebaseAuth
 import GoogleSignIn
 import RealmSwift
+import IQKeyboardManagerSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = Realm.Configuration.init(schemaVersion: 1)
         Realm.Configuration.defaultConfiguration = config
         
+        IQKeyboardManager.shared.enable = true
         FirebaseApp.configure()
         
         return true

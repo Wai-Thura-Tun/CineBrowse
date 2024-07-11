@@ -59,7 +59,8 @@ class HomeVC: UIViewController, Storyboarded {
     }
     
     @objc func onTapSearch() {
-        
+        let vc = SearchVC.instantiate()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 
     @objc func onScrollRefresh() {

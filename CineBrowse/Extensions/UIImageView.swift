@@ -18,7 +18,7 @@ extension UIImageView {
         self.kf.indicatorType = indicatorType
         self.kf.setImage(
             with: url,
-            placeholder: UIImage(named: ""),
+            placeholder: UIImage(named: "no_poster"),
             options: [
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
