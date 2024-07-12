@@ -17,4 +17,16 @@ extension UIViewController {
         alertVC.addAction(okAction)
         self.present(alertVC, animated: true)
     }
+    
+    func showConfirmAlert(title: String, message: String, handler: ((UIAlertAction) -> Void)?) {
+        let alertVC = UIAlertController.init(title: title,
+                                             message: message,
+                                             preferredStyle: .alert)
+        let okAction = UIAlertAction.init(title: "Ok", style: .default, handler: handler)
+        let cancelAction = UIAlertAction.init(title: "Cancel", style: .cancel)
+        
+        alertVC.addAction(okAction)
+        alertVC.addAction(cancelAction)
+        self.present(alertVC, animated: true)
+    }
 }

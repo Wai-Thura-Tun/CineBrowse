@@ -43,7 +43,7 @@ class SignInVC: UIViewController, Storyboarded {
 
 extension SignInVC: SignInViewDelegate {
     func onSuccessSignIn() {
-        let vc = HomeVC.instantiate()
+        let vc = TabBarVC.init()
         self.navigationController?.setViewControllers([vc], animated: true)
     }
     
