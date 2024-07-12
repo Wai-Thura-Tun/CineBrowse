@@ -35,4 +35,28 @@ extension UIImageView {
             }
         }
     }
+    
+    func setImage(url: URL?, indicatorType: IndicatorType = .activity, animateDuration: TimeInterval = 1) {
+        guard let url = url else { return }
+        let processor = DownsamplingImageProcessor(size: self.bounds.size) |> RoundCornerImageProcessor(cornerRadius: 10)
+        self.kf.indicatorType = indicatorType
+        self.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "no_poster"),
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(animateDuration)),
+                .cacheOriginalImage
+            ]
+        )
+        { result in
+            switch result {
+                case .success(let value):
+                    print("Task done for: \(value.source.url?.absoluteString ?? "")")
+                case .failure(let error):
+                    print("Job failed: \(error.localizedDescription)")
+            }
+        }
+    }
 }
