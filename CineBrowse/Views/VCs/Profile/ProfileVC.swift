@@ -13,10 +13,9 @@ class ProfileVC: UIViewController, Storyboarded {
     @IBOutlet weak var lblName: UILabel!
     @IBOutlet weak var lblEmail:  UILabel!
     @IBOutlet weak var lblFavorite: UILabel!
-    @IBOutlet weak var lblWatched: UILabel!
-    @IBOutlet weak var viewPolicy: UIView!
-    @IBOutlet weak var viewTerms: UIView!
-    @IBOutlet weak var viewContact: UIView!
+    @IBOutlet weak var btnPrivacyPolicy: UIButton!
+    @IBOutlet weak var btnTermCondition: UIButton!
+    @IBOutlet weak var btnContactUs: UIButton!
     @IBOutlet weak var lblVersion: UILabel!
     @IBOutlet weak var btnDelete: UIButton!
     @IBOutlet weak var btnLogOut: UIButton!
@@ -47,12 +46,14 @@ class ProfileVC: UIViewController, Storyboarded {
     }
     
     private func setUpViews() {
-        self.imgUser.addShadow()
+        self.imgUser.addShadow(color: .white, radius: 7)
     }
     
     private func setUpBindings() {
         btnLogOut.addTarget(self, action: #selector(onTapLogOut), for: .touchUpInside)
         btnDelete.addTarget(self, action: #selector(onTapDelete), for: .touchUpInside)
+        btnPrivacyPolicy.addTarget(self, action: #selector(onTapPrivacyPolicy), for: .touchUpInside)
+        btnTermCondition.addTarget(self, action: #selector(onTapTermsCondition), for: .touchUpInside)
     }
     
     @objc func onTapLogOut() {
@@ -66,18 +67,33 @@ class ProfileVC: UIViewController, Storyboarded {
             self.vm.deleteAcc()
         }
     }
+    
+    @objc func onTapPrivacyPolicy() {
+        let vc = PrivacyPolicyVC.instantiate()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func onTapTermsCondition() {
+        let vc = TermConditionVC.instantiate()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 extension ProfileVC: ProfileViewDelegate {
     func onLoadUser() {
-        self.lblName.text = self.vm.user?.displayName
-        self.lblEmail.text = self.vm.user?.email
-        self.imgUser.setImage(url: self.vm.user?.photoURL)
-        self.lblVersion.text = "v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String)"
+        DispatchQueue.main.async {
+            self.lblName.text = self.vm.user?.displayName
+            self.lblEmail.text = self.vm.user?.email
+            self.imgUser.setImage(url: self.vm.user?.photoURL)
+            self.lblVersion.text = "v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String)"
+            self.lblFavorite.text = String(self.vm.favoriteCount)
+        }
     }
     
     func onError(error: String) {
-        
+        DispatchQueue.main.async { [weak self] in
+            self?.showOkAlert(title: "Error", message: "Something went wrong")
+        }
     }
     
     func onSuccessDeleteOrLogout() {

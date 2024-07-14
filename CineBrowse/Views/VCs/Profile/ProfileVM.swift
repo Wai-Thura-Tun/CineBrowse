@@ -18,6 +18,10 @@ class ProfileVM {
     
     private let delegate: ProfileViewDelegate
     
+    private let favoriteRepository: FavoriteRepository = .init()
+    
+    private(set) var favoriteCount: Int = 0
+    
     init(delegate: ProfileViewDelegate) {
         self.delegate = delegate
     }
@@ -29,8 +33,11 @@ class ProfileVM {
     }
     
     func getUserInfo() {
-        if let user = Auth.auth().currentUser {
-            self.user = user
+        Task {
+            if let user = Auth.auth().currentUser {
+                self.user = user
+                self.favoriteCount = try await favoriteRepository.getFavorites().count
+            }
         }
     }
     

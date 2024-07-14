@@ -20,7 +20,7 @@ class SeasonEpisodeItemCell: UICollectionViewCell {
     
     override var isSelected: Bool {
         didSet {
-            lblNumber.textColor = isSelected ? .red : .black
+            lblNumber.textColor = isSelected ? .red : .white
         }
     }
     

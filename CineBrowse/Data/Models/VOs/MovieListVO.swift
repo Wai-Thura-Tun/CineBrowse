@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieListVO {
+struct MovieListVO: Hashable {
     let listID: Int
     let type: String
     let movies: [MovieVO]

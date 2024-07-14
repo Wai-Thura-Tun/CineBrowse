@@ -18,6 +18,8 @@ class HomeVC: UIViewController, Storyboarded {
     
     private let refreshControl = UIRefreshControl()
     
+    private var dataSource: UITableViewDiffableDataSource<Int, MovieListVO>!
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
@@ -33,29 +35,50 @@ class HomeVC: UIViewController, Storyboarded {
 
         setUpViews()
         setUpBindings()
+        setUpDataSource()
         self.vm.updateMovieLists()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.tblMovies.reloadData()
-    }
-    
     private func setUpViews() {
-        btnSearch.addShadow()
+        btnSearch.addShadow(color: .white, radius: 6)
         tblMovies.separatorStyle = .none
         tblMovies.showsVerticalScrollIndicator = false
-        tblMovies.dataSource = self
-        tblMovies.delegate = self
-        tblMovies.register(UINib.init(nibName: "BannerCell", bundle: nil), forCellReuseIdentifier: "BannerCell")
-        tblMovies.register(UINib.init(nibName: "CarouselCell", bundle: nil), forCellReuseIdentifier: "CarouselCell")
+        refreshControl.tintColor = .white
         tblMovies.refreshControl = refreshControl
     }
     
     private func setUpBindings() {
         btnSearch.addTarget(self, action: #selector(onTapSearch), for: .touchUpInside)
         refreshControl.addTarget(self, action: #selector(onScrollRefresh), for: .valueChanged)
+    }
+    
+    private func setUpDataSource() {
+        dataSource = UITableViewDiffableDataSource(tableView: self.tblMovies) { tableView, indexPath, movieListVO in
+            let data = movieListVO
+            switch data.type {
+            case MovieListType.nowPlaying.rawValue:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "BannerCell", for: indexPath) as? BannerCell
+                guard let cell = cell else { return UITableViewCell.init() }
+                cell.data = data
+                cell.delegate = self
+                return cell
+            default:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "CarouselCell", for: indexPath) as? CarouselCell
+                guard let cell = cell else { return UITableViewCell.init() }
+                cell.data = data
+                cell.delegate = self
+                return cell
+            }
+        }
+        tblMovies.register(UINib.init(nibName: "BannerCell", bundle: nil), forCellReuseIdentifier: "BannerCell")
+        tblMovies.register(UINib.init(nibName: "CarouselCell", bundle: nil), forCellReuseIdentifier: "CarouselCell")
+    }
+    
+    private func updateSnapShot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, MovieListVO>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(self.vm.movieLists, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     @objc func onTapSearch() {
@@ -71,43 +94,18 @@ class HomeVC: UIViewController, Storyboarded {
     }
 }
 
-extension HomeVC: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.vm.movieLists.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = self.vm.movieLists[indexPath.row]
-        switch data.type {
-        case MovieListType.nowPlaying.rawValue:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "BannerCell") as? BannerCell
-            guard let cell = cell else { return UITableViewCell.init() }
-            cell.data = data
-            cell.delegate = self
-            return cell
-        default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CarouselCell") as? CarouselCell
-            guard let cell = cell else { return UITableViewCell.init() }
-            cell.data = data
-            cell.delegate = self
-            return cell
-        }
-    }
-}
-
-extension HomeVC: UITableViewDelegate {
-    
-}
-
 extension HomeVC: HomeViewDelegate {
     func onLoadMovies() {
-        self.tblMovies.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.updateSnapShot()
+        }
     }
     
     func onError(error: String) {
-        print(error)
+        DispatchQueue.main.async { [weak self] in
+            self?.showOkAlert(title: "Error", message: "Something went wrong")
+        }
     }
-    
 }
 
 extension HomeVC: BannerCellDelegate {

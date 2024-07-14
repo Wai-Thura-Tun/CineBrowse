@@ -140,6 +140,7 @@ extension SearchVC: SearchViewDelegate {
     func onError(error: String) {
         DispatchQueue.main.async { [weak self] in
             self?.loadingIndicator.stopAnimating()
+            self?.showOkAlert(title: "Error", message: "Something went wrong. Check your connection and try again!")
         }
     }
 }

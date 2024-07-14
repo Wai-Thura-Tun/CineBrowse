@@ -13,10 +13,6 @@ class TabBarVC: UITabBarController {
         return HomeVC.instantiate()
     }
     
-    private var historyVC: HistoryVC {
-        return HistoryVC.instantiate()
-    }
-    
     private var favoriteVC: FavoriteVC {
         return FavoriteVC.instantiate()
     }
@@ -39,7 +35,6 @@ class TabBarVC: UITabBarController {
         viewControllers = 
         [
             homeVC,
-            historyVC,
             favoriteVC,
             profileVC
         ]

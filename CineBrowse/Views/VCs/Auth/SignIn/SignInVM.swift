@@ -18,7 +18,6 @@ protocol SignInViewDelegate {
 class SignInVM {
     
     private let delegate: SignInViewDelegate
-    private let profileRepository: ProfileRepository = .init()
     
     init(delegate: SignInViewDelegate) {
         self.delegate = delegate
@@ -37,14 +36,8 @@ class SignInVM {
             let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: user.accessToken.tokenString)
             
             Auth.auth().signIn(with: credential) { result, error in
-                guard error == nil, let user = result?.user else { return }
-                let profile = ProfileVO.init(
-                    uid: user.uid,
-                    name: user.displayName ?? "",
-                    email: user.email ?? "",
-                    photoUrl: user.photoURL?.absoluteString ?? ""
-                )
-                self.saveProfile(profile: profile)
+                guard error == nil, let _ = result?.user else { return }
+                self.delegate.onSuccessSignIn()
             }
         }
     }
@@ -52,16 +45,6 @@ class SignInVM {
     // Sign In Apple
     func signInApple() {
         
-    }
-    
-    // Save Profile After Success Sign-In
-    private func saveProfile(profile: ProfileVO) {
-        profileRepository.saveProfile(for: profile) {
-            self.delegate.onSuccessSignIn()
-        } onFailure: { error in
-            self.signOut()
-        }
-
     }
     
     // Sign Out
