@@ -16,6 +16,15 @@ extension MovieVO {
             posterUrl: self.posterUrl
         )
     }
+    
+    func toFavoriteVO() -> FavoriteVO {
+        return FavoriteVO.init(
+            movieID: self.movieID,
+            title: self.title,
+            isMovie: self.isMovie,
+            posterUrl: self.posterUrl
+        )
+    }
 }
 
 extension MovieEntity {

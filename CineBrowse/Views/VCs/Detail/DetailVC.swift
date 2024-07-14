@@ -36,7 +36,7 @@ class DetailVC: UIViewController, Storyboarded, WKNavigationDelegate {
     private func setUpViews() {
         setUpWebView()
         setUpProgressView()
-        viewReleaseDate.addBorder()
+        viewReleaseDate.addBorder(color: .white)
         setUpTblTV()
         setUpTblCastAndRelated()
     }
@@ -44,6 +44,7 @@ class DetailVC: UIViewController, Storyboarded, WKNavigationDelegate {
     private func setUpBindings() {
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
         btnBack.addTarget(self, action: #selector(onTapBack), for: .touchUpInside)
+        btnFavorite.addTarget(self, action: #selector(onTapFavorite), for: .touchUpInside)
     }
     
     private func setUpTblTV() {
@@ -63,20 +64,17 @@ class DetailVC: UIViewController, Storyboarded, WKNavigationDelegate {
     }
     
     private func setUpWebView() {
-        webView = WKWebView(frame: self.viewVideo.frame)
+        webView = WKWebView(frame: .zero)
         webView.backgroundColor = .black
         webView.scrollView.backgroundColor = .black
         webView.scrollView.isScrollEnabled = false
-        webView.scrollView.showsVerticalScrollIndicator = false
-        webView.scrollView.showsHorizontalScrollIndicator = false
-        webView.scrollView.contentInsetAdjustmentBehavior = .never
-        webView.configuration.preferences.isElementFullscreenEnabled = true
+        webView.configuration.preferences.isTextInteractionEnabled = true
         webView.configuration.allowsInlineMediaPlayback = true
         webView.configuration.allowsPictureInPictureMediaPlayback = true
-        webView.configuration.mediaTypesRequiringUserActionForPlayback = .audio
         webView.navigationDelegate =  self
         webView.translatesAutoresizingMaskIntoConstraints = false
         self.viewVideo.addSubview(webView)
+        self.webView.frame = self.viewVideo.frame
         NSLayoutConstraint.activate([
             webView.leadingAnchor.constraint(equalTo: viewVideo.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: viewVideo.trailingAnchor),
@@ -102,6 +100,15 @@ class DetailVC: UIViewController, Storyboarded, WKNavigationDelegate {
     
     @objc func onTapBack() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func onTapFavorite() {
+        if self.vm.isFavorite {
+            self.vm.removeFavorite(movieId: movie.movieID)
+        }
+        else {
+            self.vm.saveFavorite(movie: movie)
+        }
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -195,7 +202,10 @@ extension DetailVC: DetailViewDelegate {
     }
     
     func onError(error: String) {
-        
+        DispatchQueue.main.async { [weak self] in
+            self?.showOkAlert(title: "Error", message: "Something went wrong")
+            self?.navigationController?.popViewController(animated: true) 
+        }
     }
     
     private func bindData() {
@@ -212,6 +222,15 @@ extension DetailVC: DetailViewDelegate {
             lblRating.text = String(format: "%.1f", detail.voteAverage ?? 0.0)
             lblOverview.text = detail.overview
             loadVideo(urlRequest: self.vm.videoURLRequest)
+        }
+    }
+    
+    func onLoadFavorite() {
+        DispatchQueue.main.async {
+            self.btnFavorite.setImage(
+                UIImage.init(systemName: self.vm.isFavorite ? "bookmark.fill" : "bookmark"),
+                for: .normal)
+                self.btnFavorite.tintColor = self.vm.isFavorite ? .yellow : .white
         }
     }
 }

@@ -20,29 +20,44 @@ class CarouselCell: UITableViewCell {
         didSet {
             if let data = data {
                 lblTitle.text = data.type
-                self.cvCarousel.reloadData()
+                updateSnapShot()
             }
         }
     }
     
     weak var delegate: CarouselCellDelegate?
     
+    private var dataSource: UICollectionViewDiffableDataSource<Int, MovieVO>!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        setUpViews()
+        createLayout()
+        setUpDataSource()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        setUpViews()
-        createLayout()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cvCarousel.setContentOffset(.zero, animated: false)
     }
     
     private func setUpViews() {
-        cvCarousel.dataSource = self
         cvCarousel.delegate = self
         cvCarousel.register(UINib.init(nibName: "CarouselItemCell", bundle: nil), forCellWithReuseIdentifier: "CarouselItemCell")
+    }
+    
+    private func setUpDataSource() {
+        dataSource = UICollectionViewDiffableDataSource(collectionView: self.cvCarousel) { collectionView, indexPath, itemIdentifier in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CarouselItemCell", for: indexPath) as?  CarouselItemCell
+            guard let cell = cell else { return UICollectionViewCell.init() }
+            cell.data = self.data?.movies[indexPath.row]
+            return cell
+        }
     }
     
     private func createLayout() {
@@ -66,18 +81,12 @@ class CarouselCell: UITableViewCell {
         let layout = UICollectionViewCompositionalLayout(section: section)
         cvCarousel.setCollectionViewLayout(layout, animated: true)
     }
-}
-
-extension CarouselCell: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data?.movies.count ?? 0
-    }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CarouselItemCell", for: indexPath) as?  CarouselItemCell
-        guard let cell = cell else { return UICollectionViewCell.init() }
-        cell.data = data?.movies[indexPath.row]
-        return cell
+    private func updateSnapShot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, MovieVO>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(data?.movies ?? [], toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
 

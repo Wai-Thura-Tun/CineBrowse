@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct FavoriteVO {
-    let movieID: String
+struct FavoriteVO: Codable {
+    let movieID: Int
     let title: String
+    let isMovie: Bool
     let posterUrl: String
 }

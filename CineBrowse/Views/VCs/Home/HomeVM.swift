@@ -16,7 +16,13 @@ class HomeVM {
     
     private let delegate: HomeViewDelegate
     
-    init(delegate: HomeViewDelegate) {
+    private let repository: HomeRepository = .init()
+    
+    init(
+        delegate: HomeViewDelegate,
+        repository: HomeRepository = .init()
+    )
+    {
         self.delegate = delegate
     }
     
@@ -25,8 +31,6 @@ class HomeVM {
             self.delegate.onLoadMovies()
         }
     }
-    
-    private let repository: HomeRepository = .init()
     
     func getMovieLists() {
         self.movieLists = repository.getAllMovieLists().sorted { $0.listID < $1.listID }

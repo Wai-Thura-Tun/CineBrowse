@@ -48,6 +48,8 @@ extension SignInVC: SignInViewDelegate {
     }
     
     func onFailure() {
-        
+        DispatchQueue.main.async { [weak self] in
+            self?.showOkAlert(title: "Error", message: "Something went wrong")
+        }
     }
 }

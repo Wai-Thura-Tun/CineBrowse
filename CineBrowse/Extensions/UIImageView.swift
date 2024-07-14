@@ -26,14 +26,6 @@ extension UIImageView {
                 .cacheOriginalImage
             ]
         )
-        { result in
-            switch result {
-                case .success(let value):
-                    print("Task done for: \(value.source.url?.absoluteString ?? "")")
-                case .failure(let error):
-                    print("Job failed: \(error.localizedDescription)")
-            }
-        }
     }
     
     func setImage(url: URL?, indicatorType: IndicatorType = .activity, animateDuration: TimeInterval = 1) {
@@ -50,13 +42,5 @@ extension UIImageView {
                 .cacheOriginalImage
             ]
         )
-        { result in
-            switch result {
-                case .success(let value):
-                    print("Task done for: \(value.source.url?.absoluteString ?? "")")
-                case .failure(let error):
-                    print("Job failed: \(error.localizedDescription)")
-            }
-        }
     }
 }

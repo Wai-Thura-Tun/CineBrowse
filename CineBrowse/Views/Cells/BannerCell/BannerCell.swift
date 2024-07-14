@@ -22,7 +22,7 @@ class BannerCell: UITableViewCell {
             if let data = data {
                 lblTitle.text = data.type
                 pageControl.numberOfPages = data.movies.count
-                self.cvBanner.reloadData()
+                updateSnapShot()
                 startAutoScroll()
             }
         }
@@ -30,23 +30,23 @@ class BannerCell: UITableViewCell {
     
     weak var delegate: BannerCellDelegate?
     var timer: Timer?
+    private var dataSource: UICollectionViewDiffableDataSource<Int, MovieVO>!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        setUpViews()
+        createLayout()
+        setUpDataSource()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         self.selectionStyle = .none
-        setUpViews()
-        createLayout()
     }
     
     private func setUpViews() {
-        cvBanner.dataSource = self
-        cvBanner.delegate = self
         cvBanner.register(UINib.init(nibName: "BannerItemCell", bundle: nil), forCellWithReuseIdentifier: "BannerItemCell")
     }
     
@@ -81,6 +81,22 @@ class BannerCell: UITableViewCell {
         cvBanner.setCollectionViewLayout(layout, animated: true)
     }
     
+    private func setUpDataSource() {
+        dataSource = UICollectionViewDiffableDataSource(collectionView: self.cvBanner) { collectionView, indexPath, movieVO in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BannerItemCell", for: indexPath) as? BannerItemCell
+            guard let cell = cell else { return UICollectionViewCell.init() }
+            cell.data = movieVO
+            return cell
+        }
+    }
+    
+    private func updateSnapShot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, MovieVO>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(data?.movies ?? [], toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+    
     private func startAutoScroll() {
         timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(scrollToNextItem), userInfo: nil, repeats: true)
     }
@@ -113,19 +129,6 @@ class BannerCell: UITableViewCell {
     
     deinit {
         stopAutoScroll()
-    }
-}
-
-extension BannerCell: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data?.movies.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BannerItemCell", for: indexPath) as? BannerItemCell
-        guard let cell = cell else { return UICollectionViewCell.init() }
-        cell.data = data?.movies[indexPath.row]
-        return cell
     }
 }
 
