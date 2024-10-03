@@ -47,6 +47,7 @@ class BannerCell: UITableViewCell {
     }
     
     private func setUpViews() {
+        cvBanner.delegate = self
         cvBanner.register(UINib.init(nibName: "BannerItemCell", bundle: nil), forCellWithReuseIdentifier: "BannerItemCell")
     }
     

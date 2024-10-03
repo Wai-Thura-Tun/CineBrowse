@@ -19,7 +19,8 @@ protocol EndPoint: URLConvertible {
 
 extension EndPoint {
     var baseURL: URL {
-        return URL(string: Bundle.main.infoDictionary?["BASE_URL"] as? String ?? "")!
+        let environment = ProcessInfo.processInfo.environment
+        return URL(string: environment["BASE_URL"] ?? "")!
     }
     
     func asURL() throws -> URL {

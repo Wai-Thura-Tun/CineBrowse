@@ -11,9 +11,11 @@ import Kingfisher
 
 extension UIImageView {
     func setImage(path: String, indicatorType: IndicatorType = .activity, animateDuration: TimeInterval = 1) {
-        let baseURL = URL(string: Bundle.main.infoDictionary?["IMG_URL"] as? String ?? "")
+        let environment = ProcessInfo.processInfo.environment
+        let baseURL = URL(string: environment["IMG_URL"] ?? "")
         guard let baseURL = baseURL else { return }
         let url = baseURL.appending(path: path)
+        
         let processor = DownsamplingImageProcessor(size: self.bounds.size) |> RoundCornerImageProcessor(cornerRadius: 10)
         self.kf.indicatorType = indicatorType
         self.kf.setImage(

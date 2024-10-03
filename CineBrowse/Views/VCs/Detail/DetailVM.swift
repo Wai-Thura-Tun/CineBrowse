@@ -34,7 +34,8 @@ class DetailVM {
     
     var videoURLRequest: URLRequest? {
         let urlKey = isMovie ? "MOVIE_URL" : "TV_URL"
-        let urlString = Bundle.main.infoDictionary?[urlKey] as? String
+        let environment = ProcessInfo.processInfo.environment
+        let urlString = environment[urlKey]
         guard var urlString = urlString else { return nil }
         urlString = urlString + String(detail?.detail.id ?? 0)
         urlString = isMovie ? urlString + "&ds_lang=en" : urlString + "&season=\(currentSeason + 1)&episode=\(currentEpisode + 1)&ds_lang=en"
